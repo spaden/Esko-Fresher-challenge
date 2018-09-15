@@ -1,0 +1,131 @@
+package practise;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class DirectFlight {
+	public String departure,arrival;
+	public String cost;
+	public String getDept(){
+		return this.departure;
+	}
+	public String getArriv(){
+		return this.arrival;
+	}
+	public String getCost(){
+		return this.cost;
+	}
+    public DirectFlight(String arriv,String dept,String cst){
+    	this.departure=dept;
+    	this.arrival=arriv;
+    	this.cost=cst;
+    }
+}
+
+class InFlights {
+	public String departure,arrival;
+	public String cost;
+	public String getDept(){
+		return this.departure;
+	}
+	public String getArriv(){
+		return this.arrival;
+	}
+	public String getCost(){
+		return this.cost;
+	}
+    public InFlights(String arriv,String dept,String cst){
+    	this.departure=dept;
+    	this.arrival=arriv;
+    	this.cost=cst;
+    }
+}
+
+class listone {
+	public String ordme;
+	public int cost;
+	public listone(String tot, int cost){
+		this.ordme=tot;
+		this.cost=cost;
+	}
+	
+	
+	public String getList(){
+		return this.ordme;
+	}
+}
+
+public class test {
+  static List<DirectFlight> dt=new ArrayList<DirectFlight>();
+  static List<InFlights> in=new ArrayList<InFlights>();
+  static List<listone> chck1=new ArrayList<listone>();
+  static String conct;
+  static Scanner sc=new Scanner(System.in);
+  public static String arriv1,dept1,cost1;
+  public static void main(String[] args){  
+	 int n=9;
+     while(n>0){
+    	String line=sc.nextLine();
+        String[] data=line.split(" ");
+        if(data.length==2){
+            arriv1=data[0];
+            dept1=data[1];
+            //System.out.println(data[0] + "static");
+        }else if(data.length==3){
+        	setLt(data[0],data[1],data[2]);  
+        }
+        n--;
+     }
+     
+    
+     showlist();
+     for(int i=0;i<chck1.size();i++){
+    	 System.out.println(chck1.get(i).getList());
+    	 //System.out.println(in.get(i).getArriv()+" InDirect flight");
+     } 
+  }
+  
+  public static void setLt(String arriv, String dept, String cost){
+	  if(arriv.equalsIgnoreCase(arriv1)&& dept.equalsIgnoreCase(dept1)){
+		  dt.add(new DirectFlight(arriv,dept,cost));
+//		  System.out.println("added");
+	  }else {	
+		  in.add(new InFlights(arriv,dept,cost));
+		//  System.out.println("added");
+	  }
+  }
+  public static void showlist(){
+	  for(int i=0;i<dt.size();i++){
+		  DirectFlight hh=dt.get(i);
+		  String tot=hh.getArriv()+" "+hh.getDept()+" "+ hh.getCost();
+		  chck1.add(new listone(tot,Integer.parseInt(hh.getCost())));
+	      //System.out.println("added direct");
+	  }
+	  //for(int i=0;i<in.size();i++){
+		  inshow();
+	  //}
+  }
+  public static void inshow(){
+	 
+	  int flag=0,incost=0;
+	  for(int i=0;i<in.size();i++){
+		  InFlights hh=in.get(i);
+		  if(flag==0 && hh.getArriv().equals(arriv1) && !hh.getDept().equals(dept1)){
+			  flag=1;
+			  conct=hh.getDept();
+			//  System.out.println("Connecting path added "+conct);
+			  incost=Integer.parseInt(hh.getCost());
+		  }else if(flag==1 && hh.getArriv().equals(conct) && hh.getDept().equals(dept1)){
+			  incost+=Integer.parseInt(hh.getCost());
+			  String tot=arriv1 + " " + conct+ " "+dept1+ " "+Integer.toString(incost);
+			  listone lt=new listone(tot,incost);
+			  chck1.add(lt);
+			  //System.out.println("added Indirect class");
+			  flag=0;
+			  //break;
+		  }
+	  }
+  }
+}
+	
